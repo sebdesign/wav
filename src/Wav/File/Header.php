@@ -30,12 +30,7 @@ class Header
      */
     protected $format;
 
-    /**
-     * @param DataSection $section
-     *
-     * @return Header
-     */
-    public static function createFromDataSection(DataSection $section)
+    public static function createFromDataSection(DataSection $section): self
     {
         $header = new Header();
 
@@ -47,12 +42,9 @@ class Header
     }
 
     /**
-     * @param array $data
-     *
-     * @return Header
-     * @throws InvalidWavDataException
+     * @throws \Wav\Exception\InvalidWavDataException
      */
-    public static function createFromArray(array $data)
+    public static function createFromArray(array $data): self
     {
         $header = new Header();
 
@@ -71,26 +63,17 @@ class Header
         return $header;
     }
 
-    /**
-     * @return string
-     */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @return int
-     */
-    public function getSize()
+    public function getSize(): int
     {
         return $this->size;
     }
 
-    /**
-     * @return string
-     */
-    public function getFormat()
+    public function getFormat(): string
     {
         return $this->format;
     }

@@ -7,7 +7,6 @@
 
 namespace Wav;
 
-
 use Binary\Helper;
 use Wav\Exception\FileIsNotExistsException;
 use Wav\Exception\FileIsNotReadableException;
@@ -16,24 +15,20 @@ use Wav\File\DataSection;
 use Wav\File\FormatSection;
 use Wav\File\Header;
 
-
 class Parser
 {
     /**
-     * @param string $filename path to wav-file
-     *
-     * @return AudioFile
-     * @throws FileIsNotExistsException
-     * @throws FileIsNotReadableException
-     * @throws FileIsNotWavFileException
+     * @throws \Wav\Exception\FileIsNotExistsException
+     * @throws \Wav\Exception\FileIsNotReadableException
+     * @throws \Wav\Exception\FileIsNotWavFileException
      */
-    public static function fromFile($filename)
+    public static function fromFile(string $filename): AudioFile
     {
-        if (!file_exists($filename)) {
+        if (! file_exists($filename)) {
             throw new FileIsNotExistsException('File "' . $filename . '" is not exists.');
         }
 
-        if (!is_readable($filename)) {
+        if (! is_readable($filename)) {
            throw new FileIsNotReadableException('File "' . $filename . '" is not readable"');
         }
 
@@ -45,8 +40,12 @@ class Parser
         if ($size < AudioFile::HEADER_LENGTH) {
             throw new FileIsNotWavFileException('File "' . $filename . '" is not a wav-file');
         }
-        
+
         $handle = fopen($filename, 'rb');
+
+        if ($handle === false) {
+            throw new FileIsNotReadableException('File "' . $filename . '" is not readable"');
+        }
 
         try {
             $header         = Header::createFromArray(self::parseHeader($handle));
@@ -61,9 +60,8 @@ class Parser
 
     /**
      * @param resource $handle
-     * @return array
      */
-    protected static function parseHeader($handle)
+    protected static function parseHeader($handle): array
     {
         return [
             'id'     => Helper::readString($handle, 4),
@@ -74,9 +72,8 @@ class Parser
 
     /**
      * @param resource $handle
-     * @return array
      */
-    protected static function parseFormatSection($handle)
+    protected static function parseFormatSection($handle): array
     {
         return [
             'id'               => Helper::readString($handle, 4),
@@ -92,10 +89,8 @@ class Parser
 
     /**
      * @param resource $handle
-     *
-     * @return array
      */
-    protected static function parseDataSection($handle)
+    protected static function parseDataSection($handle): array
     {
         $data = [
             'id' => Helper::readString($handle, 4),

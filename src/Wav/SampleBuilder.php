@@ -14,89 +14,63 @@ use Wav\Generator\Generator;
 class SampleBuilder
 {
     /**
-     * @var Generator
+     * @var \Wav\Generator\Generator
      */
     protected $generator;
 
     /**
-     * @var number
+     * @var int
      */
     protected $sampleRate = Builder::DEFAULT_SAMPLE_RATE;
 
     /**
-     * @var number
+     * @var int
      */
     protected $volume = Builder::DEFAULT_VOLUME;
 
     /**
      * SampleBuilder constructor.
-     *
-     * @param string $name
      */
-    public function __construct($name)
+    public function __construct(string $name)
     {
         $this->generator = GeneratorFactory::getGenerator($name);
     }
 
-    /**
-     * @return Generator
-     */
-    public function getGenerator()
+    public function getGenerator(): Generator
     {
         return $this->generator;
     }
 
-    /**
-     * @param Generator $generator
-     */
-    public function setGenerator($generator)
+    public function setGenerator(Generator $generator): void
     {
         $this->generator = $generator;
     }
 
-    /**
-     * @return int
-     */
-    public function getSampleRate()
+    public function getSampleRate(): int
     {
         return $this->sampleRate;
     }
 
-    /**
-     * @param int $sampleRate
-     */
-    public function setSampleRate($sampleRate)
+    public function setSampleRate(int $sampleRate): void
     {
         $this->sampleRate = $sampleRate;
     }
 
-    /**
-     * @return number
-     */
-    public function getVolume()
+    public function getVolume(): int
     {
         return $this->volume;
     }
 
-    /**
-     * @param number $volume
-     */
-    public function setVolume($volume)
+    public function setVolume(int $volume): void
     {
         $this->volume = $volume;
     }
 
-    /**
-     * @param string $note
-     * @param int    $octave
-     * @param number $duration
-     *
-     * @return Sample
-     */
-    public function note($note, $octave, $duration)
+    public function note(string $note, int $octave, float $duration): Sample
     {
         $result = new \SplFixedArray((int) ceil($this->getSampleRate() * $duration * 2));
 
+        /** @var int $octave */
         $octave = min(8, max(1, $octave));
 
         $frequency = Note::get($note) * pow(2, $octave - 4);
@@ -111,10 +85,10 @@ class SampleBuilder
             $value = $this->getVolume()
                 * ($i / ($this->getSampleRate() * $attack))
                 * $this->getGenerator()->getWave(
-                        $this->getSampleRate(),
-                        $frequency,
-                        $this->getVolume(),
-                        $i
+                    $this->getSampleRate(),
+                    $frequency,
+                    $this->getVolume(),
+                    $i
                 );
 
             $result[$i << 1]       = Helper::packChar($value);
@@ -125,10 +99,10 @@ class SampleBuilder
             $value = $this->getVolume()
                 * pow((1 - (($i - ($this->getSampleRate() * $attack)) / ($this->getSampleRate() * ($duration - $attack)))), $dampen)
                 * $this->getGenerator()->getWave(
-                        $this->getSampleRate(),
-                        $frequency,
-                        $this->getVolume(),
-                        $i
+                    $this->getSampleRate(),
+                    $frequency,
+                    $this->getVolume(),
+                    $i
                 );
 
             $result[$i << 1]       = Helper::packChar($value);

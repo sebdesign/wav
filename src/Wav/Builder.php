@@ -7,7 +7,6 @@
 
 namespace Wav;
 
-
 use Wav\File\DataSection;
 use Wav\File\FormatSection;
 use Wav\File\Header;
@@ -49,76 +48,46 @@ class Builder
     protected $bitsPerSample;
 
     /**
-     * @var Sample[]
+     * @var \Wav\Sample[]
      */
     protected $samples;
 
-    /**
-     * @param int $audioFormat
-     *
-     * @return $this
-     */
-    public function setAudioFormat($audioFormat = WaveFormat::PCM)
+    public function setAudioFormat(int $audioFormat = WaveFormat::PCM): self
     {
         $this->audioFormat = $audioFormat;
 
         return $this;
     }
 
-    /**
-     * @param int $numberOfChannels
-     *
-     * @return $this
-     */
-    public function setNumberOfChannels($numberOfChannels = 1)
+    public function setNumberOfChannels(int $numberOfChannels = 1): self
     {
         $this->numberOfChannels = $numberOfChannels;
 
         return $this;
     }
 
-    /**
-     * @param int $sampleRate
-     *
-     * @return $this
-     */
-    public function setSampleRate($sampleRate)
+    public function setSampleRate(int $sampleRate): self
     {
         $this->sampleRate = $sampleRate;
 
         return $this;
     }
 
-    /**
-     * @param int $byteRate
-     *
-     * @return $this
-     */
-    public function setByteRate($byteRate)
+    public function setByteRate(int $byteRate): self
     {
         $this->byteRate = $byteRate;
 
         return $this;
     }
 
-    /**
-     * @param int $blockAlign
-     *
-     * @return $this
-     */
-    public function setBlockAlign($blockAlign)
+    public function setBlockAlign(int $blockAlign): self
     {
         $this->blockAlign = $blockAlign;
 
         return $this;
     }
 
-    /**
-     * @param int $bitsPerSample
-     *
-     * @return $this
-     */
-    public function setBitsPerSample($bitsPerSample)
+    public function setBitsPerSample(int $bitsPerSample): self
     {
         $this->bitsPerSample = $bitsPerSample;
 
@@ -126,21 +95,16 @@ class Builder
     }
 
     /**
-     * @param Sample[] $samples
-     *
-     * @return $this
+     * @param \Wav\Sample[] $samples
      */
-    public function setSamples(array $samples)
+    public function setSamples(array $samples): self
     {
         $this->samples = $samples;
 
         return $this;
     }
 
-    /**
-     * @return AudioFile
-     */
-    public function build()
+    public function build(): AudioFile
     {
         $raw = '';
 
@@ -158,7 +122,7 @@ class Builder
             'blockAlign' => $this->blockAlign,
             'bitsPerSample' => $this->bitsPerSample,
         ]);
-        
+
         $header = Header::createFromDataSection($data);
 
         return new AudioFile($header, $format, $data);

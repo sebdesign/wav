@@ -14,22 +14,22 @@ class Organ extends Generator
 
     const ATTACK = 0.3;
 
-    public function getName()
+    public function getName(): string
     {
         return self::NAME;
     }
 
-    public function getAttack($sampleRate = null, $frequency = null, $volume = null)
+    public function getAttack(?int $sampleRate = null, ?float $frequency = null, ?int $volume = null): float
     {
         return self::ATTACK;
     }
 
-    public function getDampen($sampleRate = null, $frequency = null, $volume = null)
+    public function getDampen(?int $sampleRate = null, ?float $frequency = null, ?int $volume = null): float
     {
         return 1 + ($frequency * 0.01);
     }
 
-    public function getWave($sampleRate, $frequency, $volume, $i)
+    public function getWave(int $sampleRate, float $frequency, int $volume, int $i): float
     {
         $base = $this->getModulations()[0];
 

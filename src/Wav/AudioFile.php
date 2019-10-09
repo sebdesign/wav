@@ -17,31 +17,27 @@ class AudioFile
     const BITS_PER_BYTE = 8;
 
     /**
-     * @var File\Header
+     * @var \Wav\File\Header
      */
     protected $header;
 
     /**
-     * @var File\FormatSection
+     * @var \Wav\File\FormatSection
      */
     protected $formatSection;
 
     /**
-     * @var File\DataSection
+     * @var \Wav\File\DataSection
      */
     protected $dataSection;
 
     /**
-     * @var Sample[]
+     * @var \Wav\Sample[]
      */
     protected $samples = [];
 
     /**
      * AudioFile constructor.
-     *
-     * @param File\Header $header
-     * @param File\FormatSection $formatSection
-     * @param File\DataSection $dataSection
      */
     public function __construct(File\Header $header, File\FormatSection $formatSection, File\DataSection $dataSection)
     {
@@ -51,30 +47,46 @@ class AudioFile
     }
 
     /**
-     * @return Sample[]
+     * @return \Wav\Sample[]
      */
     public function getAsSamples()
     {
         if (!$this->samples) {
             $raw          = $this->dataSection->getRaw();
 
-            $sampleSize   = $this->formatSection->getBitsPerSample() / self::BITS_PER_BYTE;
+            $sampleSize   = (int) ($this->formatSection->getBitsPerSample() / self::BITS_PER_BYTE);
             $samplesCount = strlen($raw) / $this->formatSection->getNumberOfChannels();
 
             for ($i = 0; $i < $samplesCount; $i++) {
-                $this->samples[] = new Sample($sampleSize, substr($raw, $i * $sampleSize, $sampleSize), $i % $this->formatSection->getNumberOfChannels());
+                $this->samples[] = new Sample(
+                    $sampleSize,
+                    substr($raw, $i * $sampleSize, $sampleSize),
+                    $i % $this->formatSection->getNumberOfChannels()
+                );
             }
         }
 
         return $this->samples;
     }
 
+    public function getAsAmplitudes(): array
+    {
+        $amplitudes = [];
+
+        $volume = pow(2, $this->formatSection->getBitsPerSample()) / 2;
+
+        foreach ($this->getAsSamples() as $sample) {
+            $value = $sample->getValue();
+            $amplitudes[] = $value / $volume;
+        }
+
+        return $amplitudes;
+    }
+
     /**
-     * @param string $filename
-     *
-     * @throws DirectoryIsNotWritableException
+     * @throws \Wav\Exception\DirectoryIsNotWritableException
      */
-    public function saveToFile($filename)
+    public function saveToFile(string $filename): void
     {
         $directory = dirname($filename);
 
@@ -84,13 +96,17 @@ class AudioFile
 
         $handle = fopen($filename, 'wb');
 
+        if ($handle == false) {
+            return;
+        }
+
         $this->writeHeader($handle);
         $this->writeFormatSection($handle);
         $this->writeDataSection($handle);
 
         fclose($handle);
     }
-    
+
     public function returnContent()
     {
         header('Content-Type: audio/wav');
@@ -120,7 +136,7 @@ class AudioFile
     /**
      * @param resource $handle
      */
-    protected function writeHeader($handle)
+    protected function writeHeader($handle): void
     {
         Helper::writeString($handle, $this->header->getId());
         Helper::writeLong($handle, $this->header->getSize());
@@ -130,7 +146,7 @@ class AudioFile
     /**
      * @param resource $handle
      */
-    protected function writeFormatSection($handle)
+    protected function writeFormatSection($handle): void
     {
         Helper::writeString($handle, $this->formatSection->getId());
         Helper::writeLong($handle, $this->formatSection->getSize());
@@ -145,57 +161,39 @@ class AudioFile
     /**
      * @param resource $handle
      */
-    protected function writeDataSection($handle)
+    protected function writeDataSection($handle): void
     {
         Helper::writeString($handle, $this->dataSection->getId());
         Helper::writeLong($handle, $this->dataSection->getSize());
         Helper::writeString($handle, $this->dataSection->getRaw());
     }
 
-    /**
-     * @return int
-     */
-    public function getAudioFormat()
+    public function getAudioFormat(): int
     {
         return $this->formatSection->getAudioFormat();
     }
 
-    /**
-     * @return int
-     */
-    public function getNumberOfChannels()
+    public function getNumberOfChannels(): int
     {
         return $this->formatSection->getNumberOfChannels();
     }
 
-    /**
-     * @return int
-     */
-    public function getSampleRate()
+    public function getSampleRate(): int
     {
         return $this->formatSection->getSampleRate();
     }
 
-    /**
-     * @return int
-     */
-    public function getByteRate()
+    public function getByteRate(): int
     {
         return $this->formatSection->getByteRate();
     }
 
-    /**
-     * @return int
-     */
-    public function getBlockAlign()
+    public function getBlockAlign(): int
     {
         return $this->formatSection->getBlockAlign();
     }
 
-    /**
-     * @return int
-     */
-    public function getBitsPerSample()
+    public function getBitsPerSample(): int
     {
         return $this->formatSection->getBitsPerSample();
     }

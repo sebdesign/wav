@@ -25,16 +25,11 @@ class DataSection extends Section
     protected $size;
 
     /**
-     * @var int[]
+     * @var string
      */
     protected $raw;
 
-    /**
-     * @param string $raw
-     *
-     * @return DataSection
-     */
-    public static function createFromRaw($raw)
+    public static function createFromRaw(string $raw): self
     {
         $chunk = new DataSection();
 
@@ -46,12 +41,9 @@ class DataSection extends Section
     }
 
     /**
-     * @param array $data
-     *
-     * @return DataSection
-     * @throws InvalidWavDataException
+     * @throws \Wav\Exception\InvalidWavDataException
      */
-    public static function createFromArray(array $data)
+    public static function createFromArray(array $data): self
     {
         $chunk = new DataSection();
 
@@ -66,26 +58,17 @@ class DataSection extends Section
         return $chunk;
     }
 
-    /**
-     * @return int[]
-     */
-    public function getRaw()
+    public function getRaw(): string
     {
         return $this->raw;
     }
 
-    /**
-     * @return string
-     */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @return int
-     */
-    public function getSize()
+    public function getSize(): int
     {
         return $this->size;
     }

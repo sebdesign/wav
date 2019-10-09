@@ -16,37 +16,25 @@ use Wav\Generator\Piano;
 
 class GeneratorFactory
 {
-    /**
-     * @return Piano
-     */
-    public static function getPianoGenerator()
+    public static function getPianoGenerator(): Piano
     {
         return new Piano();
     }
 
-    /**
-     * @return AcousticGuitar
-     */
-    public static function getAcousticGuitarGenerator()
+    public static function getAcousticGuitarGenerator(): AcousticGuitar
     {
         return new AcousticGuitar();
     }
 
-    /**
-     * @return Organ
-     */
-    public static function getOrganGenerator()
+    public static function getOrganGenerator(): Organ
     {
         return new Organ();
     }
 
     /**
-     * @param $name
-     *
-     * @return Generator
-     * @throws UnknownGenerator
+     * @throws \Wav\Exception\UnknownGenerator
      */
-    public static function getGenerator($name)
+    public static function getGenerator(string $name): Generator
     {
         switch ($name) {
             case Piano::NAME:

@@ -11,74 +11,49 @@ namespace Wav\Generator;
 abstract class Generator
 {
     /**
-     * @return Callable[]
+     * @return callable[]
      */
-    protected function getModulations()
+    protected function getModulations(): array
     {
         return [
-            function($i, $sampleRate, $frequency, $x) {
+            function(int $i, int $sampleRate, float $frequency, $x) {
                 return 1 * sin(2 * M_PI * (($i / $sampleRate) * $frequency) + $x);
             },
-            function($i, $sampleRate, $frequency, $x) {
+            function(int $i, int $sampleRate, float $frequency, $x) {
                 return 1 * sin(4 * M_PI * (($i / $sampleRate) * $frequency) + $x);
             },
-            function($i, $sampleRate, $frequency, $x) {
+            function(int $i, int $sampleRate, float $frequency, $x) {
                 return 1 * sin(8 * M_PI * (($i / $sampleRate) * $frequency) + $x);
             },
-            function($i, $sampleRate, $frequency, $x) {
+            function(int $i, int $sampleRate, float $frequency, $x) {
                 return 1 * sin(0.5 * M_PI * (($i / $sampleRate) * $frequency) + $x);
             },
-            function($i, $sampleRate, $frequency, $x) {
+            function(int $i, int $sampleRate, float $frequency, $x) {
                 return 1 * sin(0.25 * M_PI * (($i / $sampleRate) * $frequency) + $x);
             },
-            function($i, $sampleRate, $frequency, $x) {
+            function(int $i, int $sampleRate, float $frequency, $x) {
                 return 0.5 * sin(2 * M_PI * (($i / $sampleRate) * $frequency) + $x);
             },
-            function($i, $sampleRate, $frequency, $x) {
+            function(int $i, int $sampleRate, float $frequency, $x) {
                 return 0.5 * sin(4 * M_PI * (($i / $sampleRate) * $frequency) + $x);
             },
-            function($i, $sampleRate, $frequency, $x) {
+            function(int $i, int $sampleRate, float $frequency, $x) {
                 return 0.5 * sin(8 * M_PI * (($i / $sampleRate) * $frequency) + $x);
             },
-            function($i, $sampleRate, $frequency, $x) {
+            function(int $i, int $sampleRate, float $frequency, $x) {
                 return 0.5 * sin(0.5 * M_PI * (($i / $sampleRate) * $frequency) + $x);
             },
-            function($i, $sampleRate, $frequency, $x) {
+            function(int $i, int $sampleRate, float $frequency, $x) {
                 return 0.5 * sin(0.25 * M_PI * (($i / $sampleRate) * $frequency) + $x);
             },
         ];
     }
 
-    /**
-     * @return string
-     */
-    abstract public function getName();
+    abstract public function getName(): string;
 
-    /**
-     * @param number $sampleRate
-     * @param number $frequency
-     * @param number $volume
-     *
-     * @return number
-     */
-    abstract public function getAttack($sampleRate = null, $frequency = null, $volume = null);
+    abstract public function getAttack(?int $sampleRate = null, ?float $frequency = null, ?int $volume = null): float;
 
-    /**
-     * @param number $sampleRate
-     * @param number $frequency
-     * @param number $volume
-     *
-     * @return number
-     */
-    abstract public function getDampen($sampleRate = null, $frequency = null, $volume = null);
+    abstract public function getDampen(?int $sampleRate = null, ?float $frequency = null, ?int $volume = null): float;
 
-    /**
-     * @param number $sampleRate
-     * @param number$frequency
-     * @param number $volume
-     * @param number $i
-     *
-     * @return number
-     */
-    abstract public function getWave($sampleRate, $frequency, $volume, $i);
+    abstract public function getWave(int $sampleRate, float $frequency, int $volume, int $i): float;
 }

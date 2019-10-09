@@ -56,12 +56,7 @@ class FormatSection
      */
     protected $bitsPerSample;
 
-    /**
-     * @param array $data
-     *
-     * @return FormatSection
-     */
-    public static function createFromParameters(array $data)
+    public static function createFromParameters(array $data): self
     {
         $chunk = new FormatSection();
 
@@ -78,12 +73,9 @@ class FormatSection
     }
 
     /**
-     * @param array $data
-     *
-     * @return FormatSection
-     * @throws InvalidWavDataException
+     * @throws \Wav\Exception\InvalidWavDataException
      */
-    public static function createFromArray(array $data)
+    public static function createFromArray(array $data): self
     {
         $chunk = new FormatSection();
 
@@ -103,66 +95,42 @@ class FormatSection
         return $chunk;
     }
 
-    /**
-     * @return string
-     */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @return int
-     */
-    public function getSize()
+    public function getSize(): int
     {
         return $this->size;
     }
 
-    /**
-     * @return int
-     */
-    public function getAudioFormat()
+    public function getAudioFormat(): int
     {
         return $this->audioFormat;
     }
 
-    /**
-     * @return int
-     */
-    public function getNumberOfChannels()
+    public function getNumberOfChannels(): int
     {
         return $this->numberOfChannels;
     }
 
-    /**
-     * @return int
-     */
-    public function getSampleRate()
+    public function getSampleRate(): int
     {
         return $this->sampleRate;
     }
 
-    /**
-     * @return int
-     */
-    public function getByteRate()
+    public function getByteRate(): int
     {
         return $this->byteRate;
     }
 
-    /**
-     * @return int
-     */
-    public function getBlockAlign()
+    public function getBlockAlign(): int
     {
         return $this->blockAlign;
     }
 
-    /**
-     * @return int
-     */
-    public function getBitsPerSample()
+    public function getBitsPerSample(): int
     {
         return $this->bitsPerSample;
     }

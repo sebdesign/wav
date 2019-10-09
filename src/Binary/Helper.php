@@ -7,24 +7,18 @@
 
 namespace Binary;
 
-
 class Helper
 {
     /**
      * @param resource $handle
-     * @param int $length
-     *
-     * @return string
      */
-    public static function readString($handle, $length)
+    public static function readString($handle, int $length): string
     {
         return self::readUnpacked($handle, 'a*', $length);
     }
 
     /**
-     * @param mixed $data
-     *
-     * @return mixed
+     * @return string|false
      */
     public static function packString($data)
     {
@@ -33,29 +27,22 @@ class Helper
 
     /**
      * @param resource $handle
-     * @param mixed    $data
-     *
-     * @return int
      */
-    public static function writeString($handle, $data)
+    public static function writeString($handle, $data): int
     {
         return self::writeUnpacked($handle, 'a*', $data);
     }
 
     /**
      * @param resource $handle
-     *
-     * @return int
      */
-    public static function readLong($handle)
+    public static function readLong($handle): int
     {
         return self::readUnpacked($handle, 'V', 4);
     }
 
     /**
-     * @param mixed $data
-     *
-     * @return mixed
+     * @return string|false
      */
     public static function packLong($data)
     {
@@ -64,29 +51,22 @@ class Helper
 
     /**
      * @param resource $handle
-     * @param mixed    $data
-     *
-     * @return int
      */
-    public static function writeLong($handle, $data)
+    public static function writeLong($handle, $data): int
     {
         return self::writeUnpacked($handle, 'V', $data);
     }
 
     /**
      * @param resource $handle
-     *
-     * @return int
      */
-    public static function readWord($handle)
+    public static function readWord($handle): int
     {
         return self::readUnpacked($handle, 'v', 2);
     }
 
     /**
-     * @param mixed $data
-     *
-     * @return mixed
+     * @return string|false
      */
     public static function packWord($data)
     {
@@ -95,19 +75,14 @@ class Helper
 
     /**
      * @param resource $handle
-     * @param mixed $data
-     *
-     * @return int
      */
-    public static function writeWord($handle, $data)
+    public static function writeWord($handle, $data): int
     {
         return self::writeUnpacked($handle, 'v', $data);
     }
 
     /**
-     * @param mixed $data
-     *
-     * @return mixed
+     * @return string|false
      */
     public static function packChar($data)
     {
@@ -116,12 +91,8 @@ class Helper
 
     /**
      * @param resource $handle
-     * @param string   $type
-     * @param int      $length
-     *
-     * @return mixed
      */
-    protected function readUnpacked($handle, $type, $length)
+    protected static function readUnpacked($handle, string $type, int $length)
     {
         $data = unpack($type, fread($handle, $length));
 
@@ -130,23 +101,16 @@ class Helper
 
     /**
      * @param resource $handle
-     * @param string   $type
-     * @param mixed    $data
-     *
-     * @return int
      */
-    protected function writeUnpacked($handle, $type, $data)
+    protected static function writeUnpacked($handle, string $type, $data): int
     {
         return fwrite($handle, self::pack($type, $data));
     }
 
     /**
-     * @param string $type
-     * @param mixed $data
-     *
-     * @return mixed
+     * @return string|false
      */
-    protected function pack($type, $data)
+    protected static function pack(string $type, $data)
     {
         return pack($type, $data);
     }

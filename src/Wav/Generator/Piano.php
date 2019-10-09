@@ -7,7 +7,6 @@
 
 namespace Wav\Generator;
 
-
 class Piano extends Generator
 {
     /**
@@ -20,47 +19,22 @@ class Piano extends Generator
      */
     const ATTACK = 0.002;
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return self::NAME;
     }
 
-    /**
-     * @param number $sampleRate
-     * @param number $frequency
-     * @param number $volume
-     *
-     * @return float
-     */
-    public function getAttack($sampleRate = null, $frequency = null, $volume = null)
+    public function getAttack(?int $sampleRate = null, ?float $frequency = null, $volume = null): float
     {
         return self::ATTACK;
     }
 
-    /**
-     * @param number $sampleRate
-     * @param number $frequency
-     * @param number $volume
-     *
-     * @return number
-     */
-    public function getDampen($sampleRate = null, $frequency = null, $volume = null)
+    public function getDampen(?int $sampleRate = null, ?float $frequency = null, $volume = null): float
     {
         return pow(0.5 * log(($frequency * $volume) / $sampleRate), 2);
     }
 
-    /**
-     * @param number $sampleRate
-     * @param number $frequency
-     * @param number $volume
-     * @param number $i
-     *
-     * @return mixed
-     */
-    public function getWave($sampleRate, $frequency, $volume, $i)
+    public function getWave(int $sampleRate, float $frequency, int $volume, int $i): float
     {
         $base = $this->getModulations()[0];
 

@@ -20,52 +20,27 @@ class AcousticGuitar extends Generator
 
     private $playValue = 0;
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
        return self::NAME;
     }
 
-    /**
-     * @param number|null $sampleRate
-     * @param number|null $frequency
-     * @param number|null $volume
-     *
-     * @return number
-     */
-    public function getAttack($sampleRate = null, $frequency = null, $volume = null)
+    public function getAttack(?int $sampleRate = null, ?float $frequency = null, ?int $volume = null): float
     {
        return self::ATTACK;
     }
 
-    /**
-     * @param number|null $sampleRate
-     * @param number|null $frequency
-     * @param number|null $volume
-     *
-     * @return number
-     */
-    public function getDampen($sampleRate = null, $frequency = null, $volume = null)
+    public function getDampen(?int $sampleRate = null, ?float $frequency = null, ?int $volume = null): float
     {
-        return 1;
+        return 1.0;
     }
 
-    /**
-     * @param number $sampleRate
-     * @param number $frequency
-     * @param number $volume
-     * @param number $i
-     *
-     * @return number
-     */
-    public function getWave($sampleRate, $frequency, $volume, $i)
+    public function getWave(int $sampleRate, float $frequency, int $volume, int $i): float
     {
         $period = $sampleRate / $frequency;
 
         if (count($this->values) <= $period) {
-            $value = round(mt_rand(0, 1)) * 2 - 1;
+            $value = round(random_int(0, 1)) * 2 - 1;
             $this->values[] = $value;
 
             return $value;
@@ -105,5 +80,4 @@ class AcousticGuitar extends Generator
 
         return $result;
     }
-
 }

@@ -30,7 +30,7 @@ class Note
     const H = 493.88;
     const H_FLAT = self::A_SHARP;
 
-    public static function get($note)
+    public static function get($note): float
     {
         switch ($note) {
             case 'C':
